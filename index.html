@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="choise">
+        <h3>
+           ** choise game level **
+        </h3>
+        <button id="easy">easy</button>
+        <button id="middle">middle</button>
+        <button id="hard">hard</button>
+    </div>
+    <div class="box">
+        <h2>***  memory game  ***</h2>
+        <div class="gamegrid">
+        </div>
+        <p>attemps: <span class="attempsholder"> </span> <br> found : <span class="foundholder"></span></p>
+    </div>
+</body>
+<script>
+// *************vaiabels****************
+let _box=document.getElementsByClassName("box")[0]
+    let _grid = document.getElementsByClassName("gamegrid")[0]
+    let _att =document.getElementsByClassName("attempsholder")[0]
+    let _foundholder =document.getElementsByClassName("foundholder")[0]
+    let _attemps =0
+    let _found =0
+    let _cardlist
+    let _cardingame 
+    let _chosencard=[]
+    let _chosencardid=[]
+    let cardlistmain =[
+        {
+            name:"beetle" ,
+            Image :"img/beetle.png"
+        },
+        {
+            name:"beetle" ,
+            Image :"img/beetle.png"
+        },
+        {
+            name:"burger" ,
+            Image :"img/burger.png"
+        },
+        {
+            name:"burger" ,
+            Image :"img/burger.png"
+        },
+        {
+            name:"flower" ,
+            Image :"img/flower.png"
+        }, {
+            name:"flower" ,
+            Image :"img/flower.png"
+        },
+        {
+            name:"gift" ,
+            Image :"img/gift.png"
+        },
+        {
+            name:"gift" ,
+            Image :"img/gift.png"
+        },
+        {
+            name:"grapes" ,
+            Image :"img/grapes.png"
+        },{
+            name:"grapes" ,
+            Image :"img/grapes.png"
+        },
+        {
+            name:"headphone" ,
+            Image :"img/headphone.png"
+        },{
+            name:"headphone" ,
+            Image :"img/headphone.png"
+        },
+        {
+            name:"locker" ,
+            Image :"img/locker.png"
+        },{
+            name:"locker" ,
+            Image :"img/locker.png"
+        },
+        {
+            name:"moneybag" ,
+            Image :"img/moneybag.png"
+        },{
+            name:"moneybag" ,
+            Image :"img/moneybag.png"
+        },
+        {
+            name:"robot" ,
+            Image :"img/robot.png"
+        },
+        {
+            name:"robot" ,
+            Image :"img/robot.png"
+        },
+        {
+            name:"rocket" ,
+            Image :"img/rocket.png"
+        },
+        {
+            name:"rocket" ,
+            Image :"img/rocket.png"
+        },
+        {
+            name:"tea" ,
+            Image :"img/tea.png"
+        },
+        {
+            name:"tea" ,
+            Image :"img/tea.png"
+        },
+        {
+            name:"tree" ,
+            Image :"img/tree.png"
+        },{
+            name:"tree" ,
+            Image :"img/tree.png"
+        },
+        {
+            name:"umbrella" ,
+            Image :"img/umbrella.png"
+        },{
+            name:"umbrella" ,
+            Image :"img/umbrella.png"
+        },
+        {
+            name:"virus" ,
+            Image :"img/virus.png"
+        }, {
+            name:"virus" ,
+            Image :"img/virus.png"
+        },
+        {
+            name:"key" ,
+            Image :"img/key.png"
+        },{
+            name:"key" ,
+            Image :"img/key.png"
+        },
+        {
+            name:"bucket" ,
+            Image :"img/bucket.png"
+        },{
+            name:"bucket" ,
+            Image :"img/bucket.png"
+        }
+    ]
+    _btn=document.querySelectorAll(".choise>button")
+
+// *********************************
+
+_btn.forEach(_btn => {
+    _btn.addEventListener("click", chengewindow)    
+});
+function chengewindow(){
+    _btnclick = this.getAttribute("id")
+    if(_btnclick=="easy"){
+        _cardlist=cardlistmain.slice(0 , 8)
+        _grid.setAttribute("data-bz","easybz")
+    }
+    if(_btnclick=="middle"){
+        _cardlist=cardlistmain.slice(0 ,16)
+        _grid.setAttribute("data-bz","middlebz")
+    }
+    if(_btnclick=="hard"){
+        _cardlist=cardlistmain
+        _grid.setAttribute("data-bz","hardbz")
+    }
+    document.querySelector(".choise").classList.add("choiseend")
+    _box.style.animationName="show"
+    _cardingame =_cardlist.length/2
+    start()
+    
+}
+// ************************game**********************
+   
+function start(){
+    _cardlist.sort(() => 0.5 - Math.random())
+    for (let i=0 ; i<_cardlist.length ; i++){
+    let  _card = document.createElement("img")
+        _card.setAttribute("data-id" , i)
+        _card.setAttribute("src", "img/placeholder.png")
+        _card.classList.add(_grid.getAttribute("data-bz"))
+        _card.addEventListener("click", flipcard)
+        _grid.appendChild(_card)
+        console.log(_card)
+    }
+}
+
+
+function flipcard(){
+    if(_chosencard.length!=2){
+        let cardid=this.getAttribute("data-id")
+    if (this.getAttribute("src") != "img/blank.png"){
+        _chosencard.push(_cardlist[cardid].name)
+        _chosencardid.push(cardid)
+        this.setAttribute("src", _cardlist[cardid].Image)
+        if(_chosencard.length==2){
+            setTimeout(checkformatch,400)
+        }
+    }
+    }
+}
+
+function checkformatch(){
+    let _card=document.querySelectorAll("img")
+    _attemps++
+    if(_chosencard[0]==_chosencard[1]){
+        _found++
+        _card[_chosencardid[0]].setAttribute("src", "img/blank.png")
+        _card[_chosencardid[1]].setAttribute("src", "img/blank.png")}
+        else {    
+            _card[_chosencardid[0]].setAttribute("src", "img/placeholder.png")
+        _card[_chosencardid[1]].setAttribute("src", "img/placeholder.png")
+        }
+ 
+    _chosencard=[]
+    _chosencardid=[]
+    _att.innerHTML=_attemps
+    _foundholder.innerHTML=_found
+    if(_found==_cardingame){
+        console.log("55645666")
+        alert("well done !")
+    }
+}
+
+</script>
+</html>
